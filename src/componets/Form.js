@@ -1,12 +1,42 @@
 import React, { Component } from 'react';
 
 class Form extends Component{
+
+
+  /**Los refs son para leer los valores de los campos de un formulario  */
+  marcaRef = React.createRef();
+  yearRef = React.createRef();
+  planBasicoRef = React.createRef();
+  planCompletoRef = React.createRef();
+
+  cotizarSeguro = (e)=>{
+    e.preventDefault();
+
+    //Leer el plan 
+    const plan =  this.planBasicoRef.current.checked ? 'basico' : 'completo';
+
+    //Obtener los datos
+    console.log(this.marcaRef.current.value);
+
+    //Crear el objeto
+    const infoAuto = {
+      marca: this.marcaRef.current.value,
+      year: this.yearRef.current.value,
+      plan: plan
+    }
+    console.log(infoAuto);
+    //Enviarlo al componente principal
+    this.props.cotizarSeguro(infoAuto);
+    //Resetar el fomulario(opcional)
+    e.currentTarget.reset();
+  }
+
   render(){
     return(
-      <form className='cotizar-auto'>
+      <form className='cotizar-auto' onSubmit={this.cotizarSeguro}>
         <div className="field">
           <label>Marca</label>
-          <select name="marca">
+          <select name="marca" ref = {this.marcaRef}>
             <option value="americano">Americano</option>
             <option value="europeo">Europeo</option>
             <option value="asiatico">Asiatico</option>
@@ -15,7 +45,7 @@ class Form extends Component{
 
         <div className="field">
           <label>Año</label>
-          <select name="year">
+          <select name="year" ref = {this.yearRef}>
             <option value="2018">2018</option>
             <option value="2017">2017</option>
             <option value="2016">2016</option>
@@ -32,8 +62,8 @@ class Form extends Component{
 
         <div className="field">
           <label>Plan:</label>
-          <input type="radio" name="plan" value="basico"/>Basico
-          <input type="radio" name="plan" value="completo"/>Completo
+          <input type="radio" name="plan" value="basico" ref={this.planBasicoRef}/>Basico
+          <input type="radio" name="plan" value="completo" ref = {this.planCompletoRef}/>Completo
         </div>
 
         <button type="submit" className="button">Cotizar</button>
